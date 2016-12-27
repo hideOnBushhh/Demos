@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			
+		</style>
+		<link rel="stylesheet" href="横向滚动.css" />
+	</head>
+	<body>
+		<div id="box">
+			<ul>
+				<li>1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+				<li>5</li>
+				<li>6</li>		
+				<li>7</li>
+				<li>8</li>
+				<li>9</li>
+				<li>10</li>
+				<li>11</li>
+				<li>12</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+		var uls = document.querySelectorAll("ul")
+		var links = document.getElementsByTagName('link')
+		var num = 0;
+		var onoff = true;
+		function roll(){
+			var timer =  setTimeout(function(){
+				num++;
+				uls[0].style.transform = onoff?'rotateY('+(num *6)+'deg)':'rotateY('+(-num *3)+'deg)'
+				
+				roll();
+			},50)
+		}
+				roll();
+		document.onclick = function(){
+			links[0].href =  onoff? "横向转动2.css":"横向滚动.css";
+			onoff = !onoff;
+			num = 0;
+		}
+		</script>
+	</body>
+</html>

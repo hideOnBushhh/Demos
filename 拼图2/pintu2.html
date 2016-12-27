@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#wrap {
+				width: 400px;
+				height: 400px;
+				border: 1px solid black;
+			}
+			
+			#wrap div {
+				width: 100px;
+				height: 100px;
+				border: 1px solid black;
+				box-sizing: border-box;
+				float: left;
+				text-align: center;
+				line-height: 100px;
+				font-size: 50px;
+				/*background-image: url(未标题-1.jpg);*/
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="wrap"></div>
+		<input type="button" name="btn" id="btn" value="btn" />
+		<script type="text/javascript">
+			var wrap = document.getElementById("wrap");
+			var str = '';
+			var arr = [];
+			var arr3 = [];
+			var arr4= [];
+			for(var i = 0; i < 16; i++) {
+				str += '<div style = "background-position: '+(-i%4*100)+'px '+(-Math.floor(i/4)*100)+'px">'+i+'</div>'
+			}
+			wrap.innerHTML = str;
+			var divs = wrap.getElementsByTagName('div');
+			divs[divs.length-1].style.background = 'white';
+			divs[divs.length-1].innerHTML = '';
+			var num = divs.length-1;
+			for(var i = 0; i < divs.length; i++) {
+				arr.push(divs[i]);
+				arr3.push(divs[i]);
+			}
+			var arr2 = [];
+			
+//			arr3.pop();
+//			arr3.shift();
+//			arr3.push(arr[arr.length-1]);
+//			arr3.push(arr[0]);
+
+			function sortt() {
+				arr2 = arr.slice(0,arr.length-1);
+				arr2.sort(function(a, b) {
+					return(Math.random() - 0.5);
+				})
+				wrap.innerHTML = '';
+					arr4 = [];
+					var nixuhe = 0;
+				for(var i = 0; i < arr2.length; i++) {
+					arr4.push(Number(arr2[i].innerHTML));
+					if(i>0&&arr4[i]>arr4[i-1]){//逆序和
+						nixuhe++;
+					}
+				}
+//				if(nixuhe%2==1){//逆序和+（4-空白点的坐标）的和为偶数。否则为不可解数列，递归。
+//					sortt();
+//					return
+//				}
+				for(var j = 0; j < arr2.length; j++) {
+					wrap.appendChild(arr2[j]);
+				}
+//				console.log(nixuhe);
+				wrap.appendChild(arr[arr.length-1]);
+			}
+			btn.onclick = function() {
+				sortt();
+				arr2.push(arr[arr.length-1]);
+				arr = arr2;
+			}
+			function show(){
+				wrap.innerHTML = '';
+				wrap.appendChild(arr[0])
+				for(var i = 0; i < arr.length; i++) {
+					wrap.appendChild(arr[i]);
+				}
+			}
+			onkeydown = function(event){
+//				console.log(arr2)
+				if(event.keyCode == 37){//右
+					if((num+1)%4!=0){					
+						var temp = arr[num];
+						arr[num] = arr[num+1];
+						arr[num+1] = temp;
+						num+=1;
+						show();
+					}
+				}if(event.keyCode == 40){//上
+					if((num-4)>=0){
+						var temp = arr[num];
+						arr[num] = arr[num-4];
+						arr[num-4] = temp;
+						num-=4;
+						show();
+					}
+				}if(event.keyCode == 39){//左
+					if((num-1)%4!=3&&(num-1)>=0){
+						var temp = arr[num];
+						arr[num] = arr[num-1];
+						arr[num-1] = temp;
+						num-=1;
+						show();
+					}
+				}if(event.keyCode == 38){//下
+					if((num+4)<=15){
+						var temp = arr[num];
+						arr[num] = arr[num+4];
+						arr[num+4] = temp;
+						num+=4;
+						show();
+					}
+				}
+				var numm = 0;
+				for (var i = 0; i < arr.length; i++) {
+					if(arr[i]==arr3[i]){			
+						numm++;
+					}
+				}
+				if(numm==arr.length){
+					alert('win!')
+				}
+				
+				var nixuhe = 0;
+				console.log(arr)
+				for(var i = 0; i < arr.length; i++) {
+//					arr4.push(Number(arr2[i].innerHTML));
+					if(i>0&&Number(arr[i].innerHTML)<Number(arr[i-1].innerHTML)){//逆序和
+						nixuhe++;
+					}
+				}
+				console.log(nixuhe)
+				
+			}
+		</script>
+	</body>
+
+</html>

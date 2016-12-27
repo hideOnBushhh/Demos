@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#boxFatherFather {
+				width: 50px;
+				height: 70px;
+				perspective: 800px;
+				position: relative;
+				margin: auto;
+				/*transform-style: preserve-3d;*/
+			}
+			
+			.boxFather {
+				width: 50px;
+				height: 70px;
+				position: absolute;
+				border: 1px solid black;
+				top: 200px;
+				/*perspective: 800px;*/
+				/*transform: rotateZ(-90deg);*/
+				transform-style: preserve-3d;
+				transition: 5s;
+			}
+			
+			
+			.boxFather:hover {
+				transform: rotateY(360deg);
+			}
+			
+			.boxFather div {
+				width: 50px;
+				height: 70px;
+				background-color: black;
+				position: absolute;
+				border-left: 1px solid black;
+				/*transform-origin: left;*/
+				/*transform-style: preserve-3d;*/
+				/*box-sizing: border-box;*/
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="boxFatherFather">
+			<div id="boxFather1" class="boxFather"></div>
+			<div id="boxFather2" class="boxFather"></div>
+			<div id="boxFather3" class="boxFather"></div>
+			<div id="boxFather4" class="boxFather"></div>
+			<div id="boxFather5" class="boxFather"></div>
+			<div id="boxFather6" class="boxFather"></div>
+			<div id="boxFather7" class="boxFather"></div>
+			<div id="boxFather8" class="boxFather"></div>
+		</div>
+
+		<script type="text/javascript">
+			var boxFather1 = document.getElementById("boxFather1");
+			var boxFather2 = document.getElementById("boxFather2");
+			var boxFather3 = document.getElementById("boxFather3");
+			var boxFather4 = document.getElementById("boxFather4");
+			var boxFather5 = document.getElementById("boxFather5");
+			var boxFather6 = document.getElementById("boxFather6");
+			var boxFather7 = document.getElementById("boxFather7");
+			var numTime = 0;
+
+			function creat(a, height, boxFather) {
+				for(var i = 0; i < a; i++) {
+					var div = document.createElement("div");
+					var num = (((180 * (a - 2)) / a) / 180) * Math.PI; //108 du 内角 弧度制
+					var num2 = 360 / a;
+					var leng = 50 / Math.cos((180 - num) / 2) //外接圆半径
+					var leng2 = 25 * Math.tan(num / 2) //内接圆半径
+					div.style.transform = 'rotateY(' + num2 * i + 'deg) translateZ(' + (leng2+10*a) + 'px) rotateX(30deg)';
+					boxFather.style.top = height + 'px';
+					boxFather.appendChild(div);
+
+				}
+			}
+			creat(8, 300,boxFather5);
+			creat(9, 400,boxFather6);
+			creat(10, 500,boxFather7);
+		</script>
+	</body>
+
+</html>

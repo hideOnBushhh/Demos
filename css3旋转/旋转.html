@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#box {
+				position: relative;
+				margin-left: 200px;
+				margin-top: 100px;
+				perspective: 3000px;
+				transform-style: preserve-3d;
+			}
+			
+			ul {
+				width: 50px;
+				height: 500px;
+				padding: 0;
+				margin: 0;
+				transform-style: preserve-3d;
+				position: absolute;
+				transition: 1s;
+				transform-origin: center;
+			}
+			
+			li {
+				width: 50px;
+				height: 500px;
+				list-style: none;
+				position: absolute;
+				transform-origin: center;
+				/*transform-style: preserve-3d;*/
+			}
+			ul>div{
+				width: 500px;
+				height: 500px;
+				/*transform-style: preserve-3d;*/
+				position: absolute;
+				background-color: black;
+				/*left: -200px;*/
+				/*transform-origin: right;*/
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+
+		</div>
+		<script type="text/javascript">
+			var box = document.getElementById("box")
+			for(var j = 0; j < 20; j++) {
+				box.innerHTML += "<ul style='left: " + (j % 20 * 50) + "px'><li></li><div></div><li></li><li></li><li></li></ul>"
+			}
+			var uls = document.querySelectorAll("ul")
+			var lis = document.querySelectorAll("li")
+			var times = 0;
+			var divs = document.getElementsByTagName("div")
+			
+			for (var i = 1; i < divs.length; i++) {
+				divs[i].style.transform = 'rotateY(90deg)'
+			}
+			
+			for(var i = 0; i < lis.length; i++) {
+				if(i % 4 == 0) {
+					lis[i].style.transform = "rotateX(0deg) translateZ(250px)";
+					lis[i].style.backgroundImage = "url(img12/1.jpg)";
+				}
+				if(i % 4 == 1) {
+					lis[i].style.transform = "rotateX(-90deg)"
+					lis[i].style.top = "250px";
+					lis[i].style.backgroundImage = "url(img12/2.jpg)"
+				}
+				if(i % 4 == 2) {
+					lis[i].style.transform = "rotateX(-180deg) translateZ(250px)"
+					lis[i].style.backgroundImage = "url(img12/3.jpg)"
+				}
+				if(i % 4 == 3) {
+					lis[i].style.transform = "rotateX(-270deg)"
+					lis[i].style.top = "-250px";
+					lis[i].style.backgroundImage = "url(img12/4.jpg)"
+				}
+				lis[i].style.backgroundPosition = (-(Math.floor(i /4) * 50))+"px";
+			}
+//						box.style.transform = 'rotateY(50deg) rotateZ(50deg)'
+			var num = 0;
+			document.onclick = function() {
+					times++;
+					timer%=4;
+				var timer = setInterval(function() {
+					uls[num].style.transform = 'rotateX('+90*times+'deg)'
+					num++;
+					if(num >= uls.length) {
+						clearInterval(timer);
+						num = 0;
+					}
+				}, 100)
+
+			}
+//			document.onclick = function() {
+//				for(var i = 0; i < uls.length; i++) {
+//					uls[i].style.transition = 2 + "s";
+//				}
+//				var timer = setInterval(function() {
+//					uls[num].style.transform = 'rotateX(90deg)'
+//					num++;
+//					if(num >= uls.length) {
+//						clearInterval(timer);
+//						num = 0;
+//						setTimeout(function() {
+//
+//							for(var i = 0; i < uls.length; i++) {
+//								uls[i].style.transition = 0 + "s";
+//							}
+//							for(var i = 0; i < uls.length; i++) {
+//								uls[i].style.transform = 'rotateX(0deg)';
+//							}
+//						}, 2000)
+//					}
+//				}, 100)
+//
+//			}
+
+		</script>
+	</body>
+
+</html>

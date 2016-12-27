@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#box {
+				width: 900px;
+				height: 900px;
+				border: 1px solid black;
+				position: relative;
+			}
+			
+			#box div {
+				width: 30px;
+				height: 30px;
+				opacity: 0;
+				float: left;
+				background-color: tan;
+				border: 1px solid black;
+				box-sizing: border-box;
+			}
+			/*li{
+				width: 50px;
+				height: 50px;
+				background-color: blue;
+				list-style: none;
+				top:0;
+				margin: 0;
+				position: absolute;
+				border: 2px solid black;
+				box-sizing: border-box;
+			}*/
+			
+			.btn {
+				width: 60px;
+				height: 60px;
+				background-color: deeppink;
+				border: 5px solid black;
+				float: left;
+				text-align: center;
+				line-height: 60px;
+				font-size: 35px;
+			}
+			
+			#box .show {
+				opacity: 1;
+			}
+			
+			#box .high {
+				opacity: 1;
+				background-color: yellow;
+			}
+			
+			#box .head {
+				opacity: 1;
+				background-color: blue;
+			}
+			
+			#btns {
+				position: absolute;
+				right: 300px;
+				top: 200px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+
+		</div>
+		<div id="btns">
+			<div class="btn">↑</div>
+			<div class="btn">↓</div>
+			<div class="btn">←</div>
+			<div class="btn">→</div>
+		</div>
+		<script type="text/javascript">
+			var btns = document.querySelectorAll(".btn");
+			var box = document.getElementById("box");
+
+			for(var i = 0; i < 900; i++) {
+				box.innerHTML += "<div></div>"
+			}
+			var divs = document.querySelectorAll("#box div")
+
+			var arr = [0, 1, 2, 3, 4, 5];
+			var onOff = "Start";
+
+			function show() {
+				for(var j = 0; j < divs.length; j++) {
+					divs[j].className = "";
+				}
+				for(var i = 0; i < arr.length; i++) {
+					if(divs[arr[arr.length - 1]]) {
+						divs[arr[i]].className = "show"
+					}
+				}
+				console.log(arr);
+				if(divs[arr[arr.length - 1]]) {
+					divs[arr[arr.length - 1]].className = "head"
+				};
+				posi < 900 ? divs[posi].className = "high" : "";
+			}
+			show();
+			var timer = setInterval(function() {}, 100);
+
+			function tab(a) {
+				arr.push(arr[arr.length - 1] + a);
+				arr.shift();
+			}
+
+			function check() {
+				if((arr[arr.length - 1] - arr[arr.length - 2] == -1) && ((arr[arr.length - 1])) % 30 == 29) {
+					alert("哈哈，死了吧");
+					clearInterval(timer);
+					for(var j = 0; j < divs.length; j++) {
+						divs[j].className = "";
+					}
+				}
+				if((arr[arr.length - 1] - arr[arr.length - 2] == 1) && (arr[arr.length - 1]) % 30 == 0) {
+					alert("哈哈，死了吧");
+					clearInterval(timer);
+					for(var j = 0; j < divs.length; j++) {
+						divs[j].className = "";
+					}
+				}
+				if(((arr[arr.length - 1]) < 0) &&( (arr[arr.length - 1]) > 900)) {
+					alert("哈哈，死了吧");
+					clearInterval(timer);
+					for(var j = 0; j < divs.length; j++) {
+						divs[j].className = "";
+					}
+				}
+				for(var i = 0; i < arr.length - 1; i++) {
+					if(arr[arr.length - 1] == arr[i]) {
+						alert("哈哈，死了吧");
+						clearInterval(timer);
+						for(var j = 0; j < divs.length; j++) {
+							divs[j].className = "";
+						}
+					}
+				}
+			}
+			var posi = 1000;
+
+			function dot() {
+				posi = parseInt(Math.random() * 900);
+				divs[posi].className = "high";
+			}
+			dot();
+
+			function eat() {
+				if(arr[arr.length - 1] == posi) {
+
+					divs[posi].className = "show";
+					dot();
+					arr.unshift(arr[1] - arr[0] * 2);
+					//				clearInterval(timer);
+				}
+			}
+			onkeydown = function(event) {
+				if(event.keyCode == 39) {
+					if(onOff == "T" || onOff == "D" || onOff == "Start") {
+						clearInterval(timer);
+						onOff = "L";
+						timer = setInterval(function() {
+							tab(+1);
+							show();
+							check();
+							eat();
+						}, 50)
+					}
+				}
+				if(event.keyCode == 40) {
+					if(onOff == "L" || onOff == "R" || onOff == "Start") {
+						clearInterval(timer);
+						onOff = "T";
+						timer = setInterval(function() {
+							tab(30);
+							show();
+							check();
+							eat();
+						}, 50)
+					}
+				}
+				if(event.keyCode == 38) {
+					if(onOff == "L" || onOff == "R" || onOff == "Start") {
+						clearInterval(timer);
+						onOff = "D";
+						timer = setInterval(function() {
+							tab(-30);
+							show();
+							check();
+							eat();
+						}, 50)
+					}
+				}
+				if(event.keyCode == 37) {
+					if(onOff == "T" || onOff == "D") {
+						clearInterval(timer);
+						onOff = "R";
+						timer = setInterval(function() {
+							tab(-1);
+							show();
+							check();
+							eat();
+						}, 50)
+					}
+				}
+			}
+			btns[3].onclick = function() {
+				if(onOff == "T" || onOff == "D" || onOff == "Start") {
+					clearInterval(timer);
+					onOff = "L";
+					timer = setInterval(function() {
+						tab(+1);
+						check();
+						show();
+						eat();
+					}, 100)
+				}
+			}
+			btns[1].onclick = function() {
+				if(onOff == "L" || onOff == "R" || onOff == "Start") {
+					clearInterval(timer);
+					onOff = "T";
+					timer = setInterval(function() {
+						tab(30);
+						show();
+						check();
+						eat();
+					}, 100)
+				}
+			}
+			btns[0].onclick = function() {
+				if(onOff == "L" || onOff == "R" || onOff == "Start") {
+					clearInterval(timer);
+					onOff = "D";
+					timer = setInterval(function() {
+						tab(-30);
+						show();
+						check();
+						eat();
+					}, 100)
+				}
+			}
+			btns[2].onclick = function() {
+				if(onOff == "T" || onOff == "D") {
+					clearInterval(timer);
+					onOff = "R";
+					timer = setInterval(function() {
+						tab(-1);
+						show();
+						check();
+						eat();
+					}, 100)
+				}
+			}
+		</script>
+	</body>
+</html>

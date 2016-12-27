@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="" />
+		<title></title>
+
+		<style type="text/css">
+			body {
+				margin: 0;
+			}
+			
+			#box {
+				width: 600px;
+				height: 600px;
+				border: 1px solid black;
+				position: relative;
+				transform-style: preserve-3d;
+				perspective: 800px;
+				background-color: #222222;
+			}
+			
+			#box p {
+				width: 150px;
+				height: 150px;
+				background: #66512C;
+				opacity: 0.6;
+				display: none;
+				position: absolute;
+				z-index: 1;
+				margin: 0;
+				padding: 0;
+			}
+			
+			#box div {
+				width: 150px;
+				height: 150px;
+				border: 1px solid black;
+				box-sizing: border-box;
+				text-align: center;
+				line-height: 150px;
+				font-size: 90px;
+				position: absolute;
+				background-color: white;
+				background-image: url(img04.jpg);
+				background-size: 600px 600px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+			<p></p>
+		</div>
+		<input type="button" id="btn" value="打乱" />
+		<script type="text/javascript">
+			var box = document.getElementById("box");
+			var str = '';
+			for(var i = 0; i < 16; i++) {
+				str += '<div style = "left:' + i % 4 * 150 + 'px;top:' + Math.floor(i / 4) * 150 + 'px;background-position:' + (-i % 4 * 150) + 'px ' + (-Math.floor(i / 4) * 150) + 'px">' + i + '</div>'
+			}
+			box.innerHTML += str;
+			var left1 = 0;
+			var top1 = 0;
+			var that = 0;
+			var onoff = false;
+			var divs = box.getElementsByTagName('div');
+			var p = box.getElementsByTagName('p')[0]
+			var btn = document.getElementById("btn")
+			var arr = [];
+			var arr2 = [];
+			var num2 = 0;
+			var x = '';
+			var y = '';
+
+			for(var i = 0; i < divs.length; i++) {
+				arr.push(divs[i]);
+				arr2.push(divs[i]);
+			}
+
+			function show() {
+				for(var i = 0; i < arr.length; i++) {
+					arr[i].style.left = i % 4 * 150 + 'px';
+					arr[i].style.top = Math.floor(i / 4) * 150 + 'px';
+					box.appendChild(arr[i])
+				}
+			}
+
+			function check() {
+				var num = 0;
+				//				console.log(arr2+"///"+arr)
+				for(var i = 0; i < arr.length; i++) {
+					if(arr2[i] == arr[i]) {
+						num++;
+						//						console.log(num)
+					}
+					if(num == 15) {
+						alert('共用了' + num2 + '次成功')
+						num2 = 0;
+					}
+				}
+			}
+			btn.onclick = function() {
+				var a = 0;
+				var timer = setInterval(function() {
+					a++;
+					arr.sort(function(a, b) {
+						return Math.random() - 0.5;
+					})
+					show();
+					if(a == 5) {
+						clearInterval(timer)
+					}
+				}, 300)
+			}
+
+			box.onmousedown = function(e) {
+				e.target.style.transform = 'translateZ(50px)'
+				left1 = (parseFloat(getComputedStyle(e.target).left) - 75);
+				top1 = (parseFloat(getComputedStyle(e.target).top) - 75);
+				for(var i = 0; i < arr.length; i++) {
+					if(arr[i] == e.target) {
+						that = i;
+					}
+				}
+				onoff = true;
+				num2++;
+			}
+
+			box.onmousemove = function(e) {
+				if(!e.target.firstElementChild) {
+					if(onoff) {
+						x = e.clientX;
+						y = e.clientY;
+						x = x > 525 ? 525 : x;
+						y = y > 525 ? 525 : y;
+						x = x < 0 ? 0 : x;
+						y = y < 0 ? 0 : y;
+						e.target.style.left = (x - 75) + 'px';
+						e.target.style.top = (y - 75) + 'px';
+						p.style.display = 'block';
+						p.style.left = Math.floor(x / 150) * 150 + 'px';
+						p.style.top = Math.floor(y / 150) * 150 + 'px';
+					}
+				}
+				return false;
+			}
+
+			box.onmouseout = function(e) {
+				if(onoff) {
+					onoff = false;
+					arr[that].style.left = left1 + 75 + 'px';
+					arr[that].style.top = top1 + 75 + 'px';
+					p.style.display = 'none';
+					arr[that].style.transform = 'translateZ(0px)';
+				}
+			}
+
+			box.onmouseup = function(e) {
+				if(x&&y) {
+					onoff = false;
+					arr[that].style.left = Math.floor(x / 150) * 150 + 'px';
+					arr[that].style.top = Math.floor(y / 150) * 150 + 'px';
+					arr[that].style.transform = 'translateZ(0px)';
+					arr[Math.floor(x / 150) + (Math.floor(y / 150)) * 4].style.left = left1 + 75 + "px";
+					arr[Math.floor(x / 150) + (Math.floor(y / 150)) * 4].style.top = top1 + 75 + "px";
+					var temp = arr[that];
+					arr[that] = arr[Math.floor(x / 150) + (Math.floor(y / 150)) * 4];
+					arr[Math.floor(x / 150) + (Math.floor(y / 150)) * 4] = temp;
+					check();
+					p.style.display = 'none';
+					x = '';
+					y = '';
+				}else{
+					onoff = false;
+					arr[that].style.left = left1 + 75 + 'px';
+					arr[that].style.top = top1 + 75 + 'px';
+					p.style.display = 'none';
+					arr[that].style.transform = 'translateZ(0px)';
+				}
+			}
+		</script>
+	</body>
+
+</html>

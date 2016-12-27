@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#box {
+				width: 1000px;
+				height: 1000px;
+				border: 1px solid black;
+				background-image: url(img/1.jpg);
+			}
+			
+			#box>div {
+				background-color: deeppink;
+				float: left;
+				width: 10px;
+				height: 10px;
+				box-sizing: border-box;
+				text-align: center;
+				line-height: 10px;
+				font-family: "微软雅黑";
+				background-image: url(img/3.jpg);
+				background-position: ;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+		</div>
+		<script type="text/javascript">
+			var box = document.getElementById("box");
+			var str = "";
+			for(var i = 0; i < 10000; i++) {
+				str += "<div style = 'background-position:"+(-i%100*10)+"px "+(-(Math.floor(i/100))*10)+"px;'></div>"
+			}
+			box.innerHTML = str;
+
+			var divs = document.querySelectorAll("#box>div");
+
+			function tab(a) {
+				if(a>9999||a<0){
+					return
+				}
+				if(!divs[a].onoff){
+					return
+				}
+				divs[a].style.opacity = 0;
+				divs[a].onoff = false;
+				setTimeout(function() {
+					var b = a + 100;
+					var c = a - 100;
+					var d = a%100==99?a:a+1;
+					var e = a%100==0?a:a-1;
+					tab(b);
+					tab(c);
+					tab(d);
+					tab(e);
+				}, 16)
+			}
+
+			for(var i = 0; i < divs.length; i++) {
+				divs[i].index = i;
+				divs[i].onoff = true;
+				divs[i].onclick = function() {
+					tab(this.index);
+				}
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#box {
+				position: relative;
+				width: 500px;
+				height: 700px;
+				border: 1px solid black;
+				overflow: hidden;
+				margin: 100px 700px;
+				background-image: url(background.jpg);
+				background-size:500px 700px ;
+			}
+			#box h1{
+				position: absolute;
+				left: 45px;
+				top: 100px;
+				background-color: rgba(250,120,2,0.7);
+				margin: 0;
+				width: 400px;
+				height: 450px;
+				line-height: 150px;
+				border: 3px solid black;
+				font-size: 50px;
+				font-family: "微软雅黑";
+				font-weight: bold;
+				z-index: 2;
+				display: none;
+				border-radius: 25px;
+			}
+			#box h1 a{
+				font-size: 20px;
+				text-decoration: none;
+				color: black;
+			}
+			#box p {
+				width: 50px;
+				height: 700px;
+				position: absolute;
+				left: 500px;
+				top: 0;
+				margin: 0;
+				padding: 0;
+			}
+			
+			#box p div {
+				width: 50px;
+				position: absolute;
+				background-color: black;
+				font-size: 30px;
+				text-align: center;
+				background-size: 50px;
+				
+			}
+			
+			#bird {
+				width: 40px;
+				height: 30px;
+				/*background-color: rgba(0,0,0,0);*/
+				position: absolute;
+				top: 360px;
+				left: 100px;
+				z-index: 1;
+				border-radius: 50%;
+				background-image:url(bird.jpg) ;
+				background-size: 40px 30px;
+				/*transition: 16ms;*/
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+			<h2 id="bird"></h2>
+			<h1 id="fail">
+			
+			</h1>
+			<!--<div id="dead">你的小鸟挂掉了。。。</div>-->
+		</div>
+		<script type="text/javascript">
+			var box = document.getElementById("box");
+			var onoff = true;
+			var bird = document.getElementById("bird");
+			var last = 0;
+			var p1 = null;
+			var alltimer = null;
+			var misNum = 0;
+			var arr = [];
+			var fail = document.getElementById("fail");
+			
+			function faill(){
+				for(var i = 0; i < arr.length; i++) {
+					clearInterval(arr[i]);
+				}
+				clearInterval(timer);
+				onoff = false;
+				fail.innerHTML = '你滴小鸟死了哈哈哈哈哈!!!!<br>你过了'+misNum+'关   <a href="bird.html">重新开始</a>';
+				fail.style.display = 'block'
+				
+			}
+			function show() {
+				if(!onoff) {
+					return
+				}
+				timer = setTimeout(function() {
+					var p1 = document.createElement("p");
+					var div0 = document.createElement("div");
+					var div1 = document.createElement("div");
+					last = h ? h : 0;
+					var h = Math.random() * 300;
+					div0.style.height = h + 100 + 'px';
+					div1.style.height = (400 - h) + 'px'
+
+					div0.style.bottom = 0;
+					div1.style.top = 0;
+					div0.style.backgroundImage = 'url(zhuzi.jpg)';
+					div1.style.backgroundImage = 'url(zhuzi2.jpg)';
+					div1.style.backgroundPositionY = (401 - h)+'px';
+
+					p1.appendChild(div0);
+					p1.appendChild(div1);
+					box.appendChild(p1);
+					move1(p1, {
+						'left': -50
+					}, 4000, function() {
+						box.removeChild(p1);
+						misNum++;
+						arr.pop();
+					});
+					show();
+				}, 2500)
+			}
+			show();
+			
+			move(bird, {
+				top: 660
+			}, 1200, function() {
+				faill();
+			})
+
+			function check() {
+				var birdH = parseFloat(getComputedStyle(bird).top);
+				var divs = box.getElementsByTagName('div')
+				for(var i = 0; i < divs.length; i++) {
+					divs[i].H = parseFloat(getComputedStyle(divs[i]).height);
+					divs[i].T = parseFloat(getComputedStyle(divs[i]).top);
+					divs[i].L = parseFloat(getComputedStyle(divs[i].parentElement).left);
+					//	console.log(birdH+'/'+divs[i].H+'/'+divs[i].T+'/'+divs[i].L)
+					if(divs[i].L <= 120 && divs[i].L >= 50) {
+						if(divs[i].T == 0) {
+							if(birdH <= divs[i].H) {
+								faill();
+							}
+						} else {
+							if((700 - birdH) <= divs[i].H) {
+								faill();
+							}
+						}
+					}
+				}
+			}
+
+			document.onkeydown = function(e) {
+				if(onoff) {
+
+					if(e.keyCode == 32) {
+						clearInterval(bird.timer);
+						move2(bird, {
+							top: parseFloat(getComputedStyle(bird).top) - 70
+						}, 140, function() {
+							clearInterval(bird.timer);
+							move(bird, {
+								top: 660
+							}, (660 - parseFloat(getComputedStyle(bird).top)) * 3, function() {
+								faill();
+							})
+						})
+
+					}
+				}
+			}
+
+			function move(obj, object1, duration, fn) {
+				var startTime = new Date();
+				var d = duration;
+				var j = {};
+				for(var a in object1) {
+					j[a] = {};
+					j[a].b = parseFloat(getComputedStyle(obj)[a]);
+					j[a].c = object1[a] - j[a].b;
+				}
+				obj.timer = setInterval(function() {
+					check();
+					var t = new Date() - startTime;
+					if(t >= d) {
+						t = d;
+					}
+					for(var a in j) {
+						var c = j[a].c;
+						var b = j[a].b;
+						var v = (c / d) * t + b;
+						if(a == "opacity") {
+							obj.style[a] = v;
+						} else {
+							obj.style[a] = v + "px";
+						}
+					}
+					if(t == d) {
+						clearInterval(obj.timer);
+						fn && fn();
+					}
+				}, 16)
+			}
+
+			function move1(obj, object1, duration, fn) {
+				var startTime = new Date();
+				var d = duration;
+				var j = {};
+				for(var a in object1) {
+					j[a] = {};
+					j[a].b = parseFloat(getComputedStyle(obj)[a]);
+					j[a].c = object1[a] - j[a].b;
+				}
+				obj.timer = setInterval(function() {
+					arr.push(obj.timer)
+					check();
+					var t = new Date() - startTime;
+					if(t >= d) {
+						t = d;
+					}
+					for(var a in j) {
+						var c = j[a].c;
+						var b = j[a].b;
+						var v = (c / d) * t + b;
+						if(a == "opacity") {
+							obj.style[a] = v;
+						} else {
+							obj.style[a] = v + "px";
+						}
+					}
+					if(t == d) {
+						clearInterval(obj.timer);
+						fn && fn();
+					}
+				}, 16)
+			}
+			function move2(obj, object1, duration, fn) {
+				var startTime = new Date();
+				var d = duration;
+				var j = {};
+				for(var a in object1) {
+					j[a] = {};
+					j[a].b = parseFloat(getComputedStyle(obj)[a]);
+					j[a].c = object1[a] - j[a].b;
+				}
+				obj.timer = setInterval(function() {
+					arr.push(obj.timer)
+					check();
+					var t = new Date() - startTime;
+					if(t >= d) {
+						t = d;
+					}
+					for(var a in j) {
+						var c = j[a].c;
+						var b = j[a].b;
+						var v = (c / d) * t + b;
+						if(a == "opacity") {
+							obj.style[a] = v;
+						} else {
+							v = v<-20?-20:v;
+							obj.style[a] = v + "px";
+						}
+					}
+					if(t == d) {
+						clearInterval(obj.timer);
+						fn && fn();
+					}
+				}, 16)
+			}
+			
+		</script>
+	</body>
+
+</html>

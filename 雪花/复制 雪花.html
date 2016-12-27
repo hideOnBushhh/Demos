@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			body {
+				width: 100%;
+				height: 100%;
+				perspective: 8000px;
+				perspective-origin: center center;
+			}
+			#all{
+				background: radial-gradient(farthest-side at top right, #000d4c, #000000);
+			}
+			#wrap {
+				
+				position: relative;
+				transform-style: preserve-3d;
+			}
+			
+			#wrap div {
+				width: 5px;
+				height: 5px;
+				border-radius: 50%;
+				position: absolute;
+				background-color: white;
+				/*background-size: 5px 5px;*/
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id = 'all' ><div id="wrap"></div></div>
+
+		<script type="text/javascript">
+			var wrap = document.getElementById("wrap");
+			var wid = parseFloat(document.documentElement.clientWidth);
+			var degg = 30 / wid;
+			var hei = parseFloat(document.documentElement.clientHeight) > 1000 ? parseFloat(document.documentElement.clientHeight) : 1000;
+			wrap.style.width = document.documentElement.clientWidth;
+			wrap.style.height = parseFloat(document.documentElement.clientHeight) > 1000 ? document.documentElement.clientHeight : 1000 + 'px';
+			var arr = [];
+			for(var i = 0; i < 300; i++) {
+				var x1 = wid * Math.random();
+				var y1 = hei * Math.random();
+				var z1 = 8000 * Math.random();
+
+				var arr2 = [];
+				arr2.push(x1);
+				arr2.push(y1);
+				arr2.push(z1);
+
+				arr.push(arr2);
+			}
+
+//			function creat() {
+//				for(var i = 0; i < 10; i++) {
+//
+//					var x1 = wid * Math.random();
+//					var y1 = 0;
+//					var z1 = 800 * Math.random();
+//
+//					var arr2 = [];
+//					arr2.push(x1);
+//					arr2.push(y1);
+//					arr2.push(z1);
+//
+//					arr.push(arr2);
+//					show();
+//				}
+//			}
+//			//			creat();
+//			function change() {
+//
+//			}
+
+			function show() {
+				var str = '';
+				for(var i = 0; i < arr.length; i++) {
+					var div = document.createElement("div")
+						//					div.style.backgroundImage = 'url(snow'+(i%4+1)+'.png)'
+					div.style.left = arr[i][0] + 'px';
+					div.style.top = arr[i][1] + 'px';
+					div.style.transform = 'translateZ(' + (-arr[i][2]) + 'px)';
+					wrap.appendChild(div);
+
+					//					move(div,{top:hei},10000,function(){
+					//						arr.shift();
+					//					})
+				}
+			}
+			show();
+
+			//			setInterval(function(){
+			//				if(arr.length<300){
+			//					creat();
+			//				}
+			//			},50)
+			var divs = wrap.getElementsByTagName('div');
+			var timer = setInterval(function() {
+				arr.forEach(function(a, b) {
+					a[2] -= 1;
+				})
+				for(var i = 0; i < divs.length; i++) {
+					divs[i].style.transform = 'translateZ(' + arr[i][2] + 'px)'
+				}
+//				console.log(1)
+				//				show();
+			}, 16)
+
+//			function move(obj, object1, duration, fn) {
+//				var startTime = new Date();
+//				var d = duration;
+//				var j = {};
+//				for(var a in object1) {
+//					j[a] = {};
+//					j[a].b = parseFloat(getComputedStyle(obj)[a]);
+//					j[a].c = object1[a] - j[a].b;
+//				}
+////				console.log(arr);
+//				//		    	clearInterval( obj.timer );
+//
+//				obj.timer = setInterval(function() {
+//
+//					var t = new Date() - startTime;
+//					if(t >= d) {
+//						t = d;
+//					}
+//					for(var a in j) {
+//						var c = j[a].c;
+//						var b = j[a].b;
+//						var v = (c / d) * t + b;
+//						if(a == "opacity") {
+//							obj.style[a] = v;
+//						} else {
+//							obj.style[a] = v + "px";
+//						}
+//					}
+//					if(t == d) {
+//						clearInterval(obj.timer);
+//						fn && fn();
+//					}
+//				}, 16)
+//			}
+
+			document.onmousedown = function(e) {
+				var disX = e.clientX;
+				//			 	var disY = e.clientY;
+
+				document.onmousemove = function(e) {
+					wrap.style.transform = 'rotateY(' + degg * (e.clientX - disX) + 'deg)';
+				}
+				document.onmouseup = function() {
+					var n = wrap.style.transform;
+					console.log(n)
+					n = parseFloat(n.split('(')[1]);
+					console.log(n)
+					document.onmousemove = null;
+					setInterval(function(){
+						n = n<0?n+1:n-1;
+						if(n >-1&&n<1){
+							return
+						}
+						
+					console.log(n)
+					wrap.style.transform = 'rotateY('+n+'deg)';
+					},16)
+				}
+				e.cancelBubble = true;
+				return false;
+			}
+		</script>
+	</body>
+
+</html>

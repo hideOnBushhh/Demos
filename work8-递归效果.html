@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#box {
+				width: 500px;
+				height: 500px;
+				border: 1px solid black;
+				background-image: url(img/1.jpg);
+				perspective: 1920px;
+			}
+			
+			#box>div {
+				background-color: deeppink;
+				float: left;
+				width: 50px;
+				height: 50px;
+				background-image: url(img/3.jpg);
+				transition-duration: 500ms;
+				transform-style: preserve-3d;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+		</div>
+		<script type="text/javascript">
+			var box = document.getElementById("box");
+			var str = "";
+			var num = 0;
+			var num2 = 0;
+			var onoff = true;
+			var arrPic = ['url(img/1.jpg)', 'url(img/2.jpg)', 'url(img/3.jpg)', 'url(img/4.jpg)', ]
+			for(var i = 0; i < 100; i++) {
+				str += "<div style = 'background-position:" + (-i % 10 * 50) + "px " + (-(Math.floor(i / 10)) * 50) + "px;'></div>"
+			}
+			box.innerHTML = str;
+			var divs = document.querySelectorAll("#box>div");
+
+			function tab(a) {
+				onoff = false
+				if(a > 99 || a < 0) {
+					return
+				}
+				if(!divs[a].onoff) {
+					return
+				}
+				divs[a].style.transform = " translateZ(" + 500 + "px)";
+				divs[a].style.backgroundImage = arrPic[num2];
+				divs[a].onoff = false;
+				num++;
+				setTimeout(function() {
+					divs[a].style.transform = " translateZ(" + 0 + "px)";
+					var b = a + 10;
+					var c = a - 10;
+					var d = a % 10 == 9 ? a : a + 1;
+					var e = a % 10 == 0 ? a : a - 1;
+					tab(b);
+					tab(c);
+					tab(d);
+					tab(e);
+				}, 100)
+				if(num == 100) {
+					setTimeout(function(){
+						for(var i = 0; i < 100; i++) {
+							divs[i].onoff = true;
+						}
+						num = 0;
+						onoff = true;
+					}, 150)
+				}
+			}
+
+			for(var i = 0; i < divs.length; i++){
+				divs[i].index = i;
+				divs[i].onoff = true;
+				divs[i].onclick = function(){
+					if(!onoff){
+						return
+					}
+					num2++;
+					num2 %= 4;
+					tab(this.index);
+				}
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+
+		<style type="text/css">
+			#box {
+				width: 500px;
+				height: 500px;
+				border: 1px solid black;
+				transform-style: preserve-3d;
+			}
+			
+			ul {
+				width: 100px;
+				height: 100px;
+				perspective: 1920px;
+				transform-style: preserve-3d;
+				margin: 0;
+				padding: 0;
+				position: relative;
+				transition: 1s;
+				transform: rotateX(0deg) rotateY(0deg);
+			}
+			
+			li {
+				width: 100px;
+				height: 100px;
+				list-style: none;
+				margin: 0;
+				padding: 0;
+				position: absolute;
+				transform-style: preserve-3d;
+				border: 1px solid black;
+				box-sizing: border-box;
+				border-radius: 50%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+			<ul>
+				<li>1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+				<li>5</li>
+				<li>6</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			var lis = document.querySelectorAll("li");
+			var ul = document.querySelector("ul")
+
+			lis[0].style.transform = 'translateZ(50px)'
+			lis[1].style.transform = 'rotateX(90deg)'
+			lis[2].style.transform = 'translateZ(-50px)'
+			lis[3].style.transform = 'rotateX(-90deg)';
+			lis[4].style.transform = 'rotateY(90deg)'
+			lis[5].style.transform = 'rotateY(-90deg)'
+			
+			lis[0].style.backgroundColor = 'tan'
+			lis[1].style.backgroundColor = 'deeppink'
+			lis[2].style.backgroundColor = 'blue'
+			lis[3].style.backgroundColor = 'green'
+			lis[4].style.backgroundColor = 'yellow'
+			lis[5].style.backgroundColor = 'black'
+
+			lis[1].style.top = '50px'
+			lis[3].style.top = '-50px'
+			lis[4].style.left = '50px'
+			lis[5].style.left = '-50px'
+
+			var degreeX = 0;
+			var degreeY = 0;
+			onkeydown = function(event) {
+					if(event.keyCode == 39) {
+						degreeY += 90;
+						ul.style.transform = 'rotateY(' + degreeY + 'deg)'
+						ul.style.left = degreeY  + 'px'
+					}
+					if(event.keyCode == 37) {
+						degreeY -= 90;
+						ul.style.transform = 'rotateY(' + degreeY + 'deg)'
+						ul.style.left = degreeY  + 'px'
+					}
+					if(event.keyCode == 38) {
+						degreeX += 90;
+						ul.style.transform = 'rotateX(' + degreeX + 'deg)'
+						ul.style.top = degreeX  + 'px'
+					}
+					if(event.keyCode == 40) {
+						degreeX -= 90;
+						ul.style.transform = 'rotateX(' + degreeX + 'deg)'
+						ul.style.top = degreeX  + 'px'
+					}
+
+				}
+				//			d
+		</script>
+
+	</body>
+
+</html>

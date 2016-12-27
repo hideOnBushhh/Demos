@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			body {
+				margin: 0;
+			}
+			
+			#wrap {
+				width: 1800px;
+				height: 700px;
+				border: 1px solid black;
+				position: relative;
+				overflow: hidden;
+			}
+			
+			#wrap p {
+				width: 10px;
+				height: 10px;
+				background-color: black;
+				border-radius: 50%;
+				position: absolute;
+				/*transition: 500ms;*/
+			}
+			
+			#tank {
+				width: 100px;
+				height: 100px;
+				position: absolute;
+				/*border: 1px solid black;*/
+				transition: 100ms;
+			}
+			
+			#tanbody {
+				width: 100px;
+				height: 100px;
+				border: 2px solid saddlebrown;
+				tank-sizing: border-tank;
+				border-radius: 20%;
+				background-color: tan;
+				position: absolute;
+			}
+			
+			#tanhead {
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				background-color: #8B4513;
+				position: absolute;
+				top: 23px;
+				left: 23px;
+			}
+			
+			#tangun {
+				width: 100px;
+				height: 20px;
+				border-radius: 10%;
+				position: absolute;
+				background-color: #8B4513;
+				top: 38px;
+				left: 48px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="wrap">
+			<div id="tank">
+				<div id="tanbody">
+					<div id="tangun">
+
+					</div>
+					<div id="tanhead">
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var wrap = document.getElementById("wrap");
+			var tank = document.getElementById("tank");
+			var onoff = '';
+			var last = '';
+			var gunonoff = true;
+
+			setInterval(function() {
+				if(onoff == 'l') {
+					tank.style.left = tank.offsetLeft - 5 < -100 ? 1850 + 'px' : tank.offsetLeft - 10 + 'px';
+					tank.style.transform = 'rotate(-180deg)';
+				}
+				if(onoff == 't') {
+					tank.style.top = tank.offsetTop - 5 < -100 ? 750 + 'px' : tank.offsetTop - 10 + 'px';
+					tank.style.transform = 'rotate(-90deg)';
+				}
+				if(onoff == 'r') {
+					tank.style.left = (tank.offsetLeft - 5 > 1800) ? -50 + 'px' : tank.offsetLeft + 10 + 'px';
+					tank.style.transform = 'rotate(0deg)';
+				}
+				if(onoff == 'd') {
+					tank.style.top = tank.offsetTop - 5 > 700 ? -50 + 'px' : tank.offsetTop + 10 + 'px';
+					tank.style.transform = 'rotate(90deg)';
+				}
+			}, 10)
+			document.addEventListener('keydown', function(e) {
+				if(e.keyCode == 37) {
+					onoff = 'l';
+				}
+				if(e.keyCode == 38) {
+					onoff = 't';
+
+				}
+				if(e.keyCode == 39) {
+					onoff = 'r';
+
+				}
+				if(e.keyCode == 40) {
+					onoff = 'd';
+
+				}
+				if(onoff){
+					
+					last = onoff;
+				}
+				if(e.keyCode == 32) {
+					if(gunonoff) {
+						gunonoff = false;
+						var p = document.createElement("p");
+						p.style.left = tank.offsetLeft + 150 + 'px';
+						p.style.top = tank.offsetTop + 30 + 'px';
+						wrap.appendChild(p);
+						if(last == 'l') {
+							
+						p.style.left = tank.offsetLeft - 50 + 'px';
+						p.style.top = tank.offsetTop + 30 + 'px';
+						wrap.appendChild(p);
+						
+							move(p, {
+								left: p.offsetLeft - 500
+							}, 1000, function() {
+								wrap.removeChild(p);
+							})
+						}
+						if(last == 't') {
+							
+						p.style.left = tank.offsetLeft + 45 + 'px';
+						p.style.top = tank.offsetTop - 73 + 'px';
+						wrap.appendChild(p);
+						
+							move(p, {
+								top: p.offsetTop - 500
+							}, 1000, function() {
+								wrap.removeChild(p);
+							})
+						}
+						if(last == 'r'||last == '') {
+							
+						p.style.left = tank.offsetLeft + 150 + 'px';
+						p.style.top = tank.offsetTop + 30 + 'px';
+						wrap.appendChild(p);
+						
+							move(p, {
+								left: p.offsetLeft + 500
+							}, 1000, function() {
+								wrap.removeChild(p);
+							})
+						}
+						if(last == 'd') {
+							
+						p.style.left = tank.offsetLeft + 45 + 'px';
+						p.style.top = tank.offsetTop + 135 + 'px';
+						wrap.appendChild(p);
+						
+
+							move(p, {
+								top: p.offsetTop + 500
+							}, 1000, function() {
+								wrap.removeChild(p);
+							})
+						}
+
+						setTimeout(function() {
+							gunonoff = true;
+						}, 300)
+					}
+
+				}
+			})
+			document.addEventListener('keyup', function(e) {
+				if(e.keyCode == 37) {
+					onoff = '';
+				}
+				if(e.keyCode == 38) {
+					onoff = '';
+
+				}
+				if(e.keyCode == 39) {
+					onoff = '';
+
+				}
+				if(e.keyCode == 40) {
+					onoff = '';
+				}
+				
+			})
+
+			function move(obj, object1, duration, fn) {
+				var startTime = new Date();
+				var d = duration;
+				var j = {};
+				for(var a in object1) {
+					j[a] = {};
+					j[a].b = parseFloat(getComputedStyle(obj)[a]);
+					j[a].c = object1[a] - j[a].b;
+				}
+				obj.timer = setInterval(function() {
+					var t = new Date() - startTime;
+					if(t >= d) {
+						t = d;
+					}
+					for(var a in j) {
+						var c = j[a].c;
+						var b = j[a].b;
+						var v = (c / d) * t + b;
+						if(a == "opacity") {
+							obj.style[a] = v;
+						} else {
+							obj.style[a] = v + "px";
+						}
+					}
+					if(t == d) {
+						clearInterval(obj.timer);
+						fn && fn();
+					}
+				}, 16)
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			li {
+				list-style-type: none;
+				border: 1px solid black;
+				width: 50px;
+				height: 25px;
+				float: left;
+				box-sizing: border-box;
+				text-align: center;
+				line-height: 25px;
+			}
+			
+			.clear:after {
+				display: block;
+				clear: both;
+				content: "";
+			}
+			
+			#list {
+				width: 350px;
+			}
+			
+			#list>li {
+				float: left;
+			}
+			
+			#content {
+				width: 350px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<ul id="list" class="clear">
+			<li>日</li>
+			<li>一</li>
+			<li>二</li>
+			<li>三</li>
+			<li>四</li>
+			<li>五</li>
+			<li>六</li>
+		</ul>
+		<ul id="content">
+		</ul>
+		<input type="button" id="prev" value="←"></input>
+		<span id="thisMon"></span>
+		<input type="button" id="next" value="→"></input>
+
+		<script type="text/javascript">
+			var content = document.getElementById("content");
+			var thisMon = document.querySelector("#thisMon");
+			var prev = document.getElementById("prev");
+			var next = document.getElementById("next");
+
+			var now = new Date();
+			var nowMon = now.getMonth();
+			var nowYer = now.getFullYear();
+			var monNum = nowMon;
+			var yerNum = nowYer;
+
+			function monTab(yerNum, monNum) {
+
+				var firDate = new Date(); //获取第一天
+
+				firDate.setDate(1);
+				firDate.setMonth(monNum);
+				var firDay = firDate.getDay();
+
+				var lastDate = new Date(); //获取最后一天
+				lastDate.setDate(1);
+				lastDate.setMonth(monNum + 1);
+				lastDate.setDate(0);
+				var lastDay = lastDate.getDay();
+				var lastDateNum = lastDate.getDate();
+
+				var str = "";
+				for(var i = 0; i < lastDateNum + firDay; i++) {
+
+					if(i < firDay) {
+
+						str += "<li style = 'opacity:0'>" + (i - firDay + 1) + "</li>"
+					} else {
+
+						str += "<li>" + (i - firDay + 1) + "</li>"
+					}
+
+				}
+				content.innerHTML = str;
+				thisMon.innerHTML = yerNum + "年" + (monNum + 1) + "月";
+
+			}
+
+			monTab(yerNum, monNum);
+			prev.onclick = function() {
+				monNum--;
+				yerNum = monNum > -1 ? yerNum : yerNum - 1;
+				monNum = monNum > -1 ? monNum : 11;
+				monTab(yerNum, monNum);
+			}
+			next.onclick = function() {
+				monNum++;
+				yerNum = monNum < 12 ? yerNum : yerNum + 1;
+				monNum = monNum < 12 ? monNum : 0;
+				monTab(yerNum, monNum);
+			}
+		</script>
+	</body>
+
+</html>
